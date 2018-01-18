@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/xtend/xtend.iml" filepath="$PROJECT_DIR$/xtend/xtend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xtend-app.iml" filepath="$PROJECT_DIR$/xtend-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xtend-lib/xtend-lib.iml" filepath="$PROJECT_DIR$/xtend-lib/xtend-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.github.zerh.xtend/com.github.zerh.xtend.iml" filepath="$PROJECT_DIR$/.idea/modules/com.github.zerh.xtend/com.github.zerh.xtend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.github.zerh.xtend-lib/com.github.zerh.xtend-lib.iml" filepath="$PROJECT_DIR$/.idea/modules/com.github.zerh.xtend-lib/com.github.zerh.xtend-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xtend.iml" filepath="$PROJECT_DIR$/xtend.iml" />
     </modules>
   </component>
 </project>

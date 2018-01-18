@@ -8,8 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/xtend" />
-            <option value="$PROJECT_DIR$/xtend-lib" />
+            <option value="$PROJECT_DIR$/com.github.zerh.xtend" />
+            <option value="$PROJECT_DIR$/com.github.zerh.xtend-lib" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

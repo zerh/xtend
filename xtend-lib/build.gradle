@@ -1,11 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin:  'com.github.dcendents.android-maven'
-group = 'com.github.com.xtend'
+group = 'com.github.com.com.github.zerh.xtend'
 
 android {
     compileSdkVersion 26
 
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         minSdkVersion 19

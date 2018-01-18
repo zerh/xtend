@@ -1,1 +1,1 @@
-include ':xtend', ':xtend-lib'
+include ':com.github.zerh.xtend', ':com.github.zerh.xtend-lib'
