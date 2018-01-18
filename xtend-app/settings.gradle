@@ -1,1 +1,1 @@
-include ':xtend'
+include ':xtend', ':xtend-lib'
