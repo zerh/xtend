@@ -10,7 +10,8 @@ import android.view.ViewGroup;
  * Created by eliezer on 10/30/17.
  */
 
-public abstract class Fragment extends android.support.v4.app.Fragment {
+public abstract class Fragment extends android.app.Fragment 
+{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {

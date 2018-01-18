@@ -1,7 +1,7 @@
 package com.github.zerh.xtend;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +28,7 @@ public class Xtend {
 
     private static String ID = "id";
 
-    public static void map(AppCompatActivity activity, Bundle bundle){
+    public static void map(Activity activity, Bundle bundle){
 
         int optionsMenuRes;
 
