@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/xtend.iml" filepath="$PROJECT_DIR$/xtend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xtend-app.iml" filepath="$PROJECT_DIR$/xtend-app.iml" />
     </modules>
   </component>
 </project>
