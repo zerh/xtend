@@ -1,16 +1,14 @@
-package com.github.zerh.xtend.net.annotation;
+package com.github.zerh.xtend.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-/**
- * Created by eliezer on 12/24/17.
- */
+import java.util.List;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface Field {
+@Target(ElementType.METHOD)
+public @interface DataSource {
     String value();
+    Class returnType() default List.class;
 }

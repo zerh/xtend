@@ -1,21 +1,11 @@
 package com.github.zerh.xtend.net;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 
-import com.github.zerh.xtend.net.annotation.DELETE;
-import com.github.zerh.xtend.net.annotation.Field;
-import com.github.zerh.xtend.net.annotation.GET;
-import com.github.zerh.xtend.net.annotation.HEAD;
-import com.github.zerh.xtend.net.annotation.Header;
-import com.github.zerh.xtend.net.annotation.Headers;
-import com.github.zerh.xtend.net.annotation.POST;
-import com.github.zerh.xtend.net.annotation.PUT;
-import com.github.zerh.xtend.net.annotation.Part;
-import com.github.zerh.xtend.net.annotation.Path;
-import com.github.zerh.xtend.net.annotation.Prefix;
-import com.github.zerh.xtend.net.annotation.Query;
+import com.github.zerh.xtend.net.annotation.*;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -39,21 +29,16 @@ import java.util.Map;
 
 public class RestBuilder {
 
-    static Object build2(Object obj, Class restInterface) {
-        return Proxy.newProxyInstance(restInterface.getClassLoader(),
-                new Class[]{restInterface}, new Handler(obj));
-    }
-
-    public static <T> T build(Object obj, Class<T> restInterface) {
+    public static <T extends Activity, R> R build(T obj, Class<R> restInterface) {
         return restInterface.cast(Proxy.newProxyInstance(restInterface.getClassLoader(),
-                new Class[]{restInterface}, new Handler(obj)));
+                new Class[]{restInterface}, new Handler<T>(obj)));
     }
 
-    static class Handler implements InvocationHandler {
+    static class Handler<T extends Activity> implements InvocationHandler {
 
-        Object object;
+        T object;
 
-        public Handler(Object object){
+        public Handler(T object){
             this.object = object;
         }
 
@@ -64,9 +49,9 @@ public class RestBuilder {
                 return method.invoke(this, args);
             }
 
-            String prefix = null;
+            String prefix = "";
             String path = null;
-            Call call;
+            HttpRequest httpRequest;
 
             Map<String, MultiPartFile> multiPartFileMap = new HashMap<>();
             Map<String, String> params = new HashMap<>();
@@ -87,69 +72,69 @@ public class RestBuilder {
                 if(args!=null)
                     path = buildPath(method, args, path);
 
-                call = new Call(this.object, path, RequestMethod.GET, params, multiPartFileMap, headers);
+                httpRequest = new HttpRequest(this.object, path, RequestMethod.GET, params, multiPartFileMap, headers);
 
-                prepareCall(call, method, args, null, null, headers);
+                prepareCall(httpRequest, method, args, null, null, headers);
 
-                return call;
+                return httpRequest;
 
             } else if (method.getAnnotation(HEAD.class) != null) {
                 path = prefix + method.getAnnotation(HEAD.class).value();
                 if(args!=null)
                     path = buildPath(method, args, path);
 
-                call = new Call(this.object, path, RequestMethod.GET, params, multiPartFileMap, headers);
+                httpRequest = new HttpRequest(this.object, path, RequestMethod.HEAD, params, multiPartFileMap, headers);
 
-                prepareCall(call, method, args, params, multiPartFileMap, headers);
+                prepareCall(httpRequest, method, args, params, multiPartFileMap, headers);
 
-                return call;
+                return httpRequest;
 
             } else if (method.getAnnotation(POST.class) != null) {
                 path = prefix + method.getAnnotation(POST.class).value();
                 if(args!=null)
                     path = buildPath(method, args, path);
 
-                call = new Call(this.object, path, RequestMethod.POST, params, multiPartFileMap, headers);
+                httpRequest = new HttpRequest(this.object, path, RequestMethod.POST, params, multiPartFileMap, headers);
 
-                prepareCall(call, method, args, params, multiPartFileMap, headers);
+                prepareCall(httpRequest, method, args, params, multiPartFileMap, headers);
 
-                return call;
+                return httpRequest;
 
             } else if (method.getAnnotation(PUT.class) != null) {
                 path = prefix + method.getAnnotation(PUT.class).value();
                 if(args!=null)
                     path = buildPath(method, args, path);
 
-                call = new Call(this.object, path, RequestMethod.PUT, params, multiPartFileMap, headers);
+                httpRequest = new HttpRequest(this.object, path, RequestMethod.PUT, params, multiPartFileMap, headers);
 
-                prepareCall(call, method, args, params, multiPartFileMap, headers);
+                prepareCall(httpRequest, method, args, params, multiPartFileMap, headers);
 
-                return call;
+                return httpRequest;
 
             } else if (method.getAnnotation(DELETE.class) != null) {
                 path = prefix + method.getAnnotation(DELETE.class).value();
                 if(args!=null)
                     path = buildPath(method, args, path);
 
-                call = new Call(this.object, path, RequestMethod.DELETE, params, multiPartFileMap, headers);
+                httpRequest = new HttpRequest(this.object, path, RequestMethod.DELETE, params, multiPartFileMap, headers);
 
-                prepareCall(call, method, args, params, multiPartFileMap, headers);
+                prepareCall(httpRequest, method, args, params, multiPartFileMap, headers);
 
-                return call;
+                return httpRequest;
             }
 
             return null;
         }
 
-        private void prepareCall(Call call, Method method, Object[] args, Map<String, String> params,
+        private void prepareCall(HttpRequest httpRequest, Method method, Object[] args, Map<String, String> params,
                                  Map<String, MultiPartFile> multiPartFileMap, List<String> headers){
 
             if(args!=null && isMultiPart(method, args)) {
-                call.multipart = true;
+                httpRequest.multipart = true;
                 buildMultiPartBody(method, args, params, multiPartFileMap);
                 buildHeader(method, args, headers);
             } else if(args!=null){
-                call.multipart = false;
+                httpRequest.multipart = false;
                 buildBody(method, args, params);
                 buildHeader(method, args, headers);
             }

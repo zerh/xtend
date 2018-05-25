@@ -1,130 +1,261 @@
 package com.github.zerh.xtend;
 
-import android.os.Bundle;
-//import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
+import android.widget.ListView;
 
-import com.github.zerh.xtend.annotation.ContentView;
-import com.github.zerh.xtend.annotation.OnCreateOptionsMenu;
-import com.github.zerh.xtend.annotation.PostInflated;
-import com.github.zerh.xtend.annotation.UI;
+import com.github.zerh.xtend.annotation.*;
 import com.github.zerh.xtend.net.RestBuilder;
 import com.github.zerh.xtend.net.annotation.RestService;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-/**
- * Created by eliezer on 11/12/17.
- */
+import java.util.function.Function;
 
 public class Xtend {
 
-    private static String ID = "id";
+    public static Context context;
 
-    public static void map(Activity activity, Bundle bundle){
+    public static ListView l;
 
-        int optionsMenuRes;
+    public static <T extends Activity> void map(T object) {
 
-        processRestService(activity);
+        if (object.getClass().getAnnotation(ContentView.class) != null) {
+            int viewId = object.getClass().getAnnotation(ContentView.class).value();
+            object.setContentView(viewId);
+        }
+        View view = object.findViewById(android.R.id.content);
 
-        if(activity.getClass().getAnnotation(ContentView.class) != null) {
-            int viewId = activity.getClass().getAnnotation(ContentView.class).value();
-            activity.setContentView(viewId);
-            View view = activity.getWindow().getDecorView().findViewById(android.R.id.content);
-            Log.d("Yaa", view + "");
-            processUi(activity, view);
-            processPostInflated(activity);
+        String pkName = object.getPackageName();
+
+        for (Field field : object.getClass().getDeclaredFields()) {
+            processUi(object.getResources(), pkName, object, field, view);
+            processRestService(object, field);
         }
 
-        if(activity.getClass().getAnnotation(OnCreateOptionsMenu.class) != null) {
-            optionsMenuRes = activity.getClass().getAnnotation(OnCreateOptionsMenu.class).value();
-            PopupMenu p  = new PopupMenu(activity, null);
-            Menu menu = p.getMenu();
-            activity.getMenuInflater().inflate(optionsMenuRes, menu);
+        for (Method method : object.getClass().getDeclaredMethods()) {
+            processClick(object.getResources(), pkName, object, method, view);
+            processLongClick(object.getResources(), pkName, object, method, view);
+            processSectionPagerAdapter(object::findViewById, object, method);
+            processPostInflated(object, method);
         }
     }
 
-    public static View map(Fragment fragment, LayoutInflater inflater, ViewGroup container){
+    public static <T extends Fragment> void map(T object, View view) {
 
-        processRestService(fragment);
-
-        if(fragment.getClass().getAnnotation(ContentView.class) != null) {
-            int id = fragment.getClass()
-                    .getAnnotation(ContentView.class).value();
-            View view = inflater.inflate(id, container, false);
-            processUi(fragment, view);
-            processPostInflated(fragment);
-            return view;
+        if (object.getClass().getAnnotation(ContentView.class) != null) {
+            int viewId = object.getClass().getAnnotation(ContentView.class).value();
+            LayoutInflater.from(object.getActivity())
+                    .inflate(viewId, ((ViewGroup)object.getView().getParent()), false);
         }
 
-        return null;
+        String pkName = object.getActivity().getPackageName();
+
+        for (Field field : object.getClass().getDeclaredFields()) {
+            processUi(object.getResources(), pkName, object, field, view);
+            processRestService(object.getActivity(), field);
+        }
+
+        for (Method method : object.getClass().getDeclaredMethods()) {
+            processClick(object.getResources(), pkName, object, method, view);
+            processLongClick(object.getResources(), pkName, object, method, view);
+            processSectionPagerAdapter(object.getView()::findViewById, object, method);
+            processPostInflated(object, method);
+        }
+
     }
 
-    public static void processRestService(Object obj){
-        for (Field field : obj.getClass().getDeclaredFields()) {
-            if (field.getAnnotation(RestService.class) != null) {
-                field.setAccessible(true);
-                try {
-                    field.set(obj, field.getType().cast(RestBuilder.build(obj, field.getType())));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+
+    static <T extends Fragment> View map(T object, LayoutInflater inflater, ViewGroup container) {
+
+        View view = null;
+        if (object.getClass().getAnnotation(ContentView.class) != null) {
+
+            ContentView contentView = object.getClass().getAnnotation(ContentView.class);
+            int id = contentView.value();
+            boolean attachToRoot = contentView.attachToRoot();
+
+            view = inflater.inflate(id, container, attachToRoot);
+        }
+
+        String pkName = object.getActivity().getPackageName();
+
+        for (Field field : object.getClass().getDeclaredFields()) {
+            processUi(object.getResources(), object.getActivity().getPackageName(), object, field, view);
+            processRestService(object.getActivity(), field);
+        }
+
+        for (Method method : object.getClass().getDeclaredMethods()) {
+            processClick(object.getResources(), pkName, object, method, view);
+            processLongClick(object.getResources(), pkName, object, method, view);
+            //processSectionPagerAdapter(object.getView()::findViewById, object, method);
+            processPostInflated(object, method);
+        }
+
+
+        return view;
+    }
+
+    static <T extends Activity> void processRestService(T object, Field field) {
+        if (field.getAnnotation(RestService.class) != null) {
+            field.setAccessible(true);
+            try {
+                field.set(object, field.getType().cast(RestBuilder.build(object, field.getType())));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public static void processPostInflated(Object object){
-        for (Method method : object.getClass().getDeclaredMethods()) {
-            if(method.getAnnotation(PostInflated.class)!=null) {
+    static void processPostInflated(Object object, Method method) {
+        if (method.getAnnotation(PostInflated.class) != null) {
+            try {
+                if (method.getParameterTypes().length == 0) {
+                    method.invoke(object);
+                }
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    static void processUi(Resources resources, String pkName, Object object, Field field, View view) {
+        if (field.getAnnotation(UI.class) != null) {
+
+            int resId = -1;
+
+            if (field.getAnnotation(UI.class).value() != -1) {
+                resId = field.getAnnotation(UI.class).value();
+            } else {
+                resId = resources.getIdentifier(field.getName(), "id", pkName);
+            }
+
+            field.setAccessible(true);
+
+            try {
+                field.set(object, field.getType().cast(view.findViewById(resId)));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    static void processClick(Resources resources, String pkName, Object object, Method method, View view) {
+        if (method.getAnnotation(Click.class) != null) {
+
+            int resId = -1;
+
+            if (method.getAnnotation(Click.class).value() != -1) {
+                resId = method.getAnnotation(Click.class).value();
+            } else {
+                resId = resources.getIdentifier(method.getName(), "id", pkName);
+            }
+
+            method.setAccessible(true);
+            View targetView = view.findViewById(resId);
+
+            targetView.setOnClickListener(v -> {
                 try {
-                    if(method.getParameterTypes().length==0) {
+                    if (method.getParameterTypes().length == 0) {
                         method.invoke(object);
+                    } else if (method.getParameterTypes().length == 1) {
+                        method.invoke(object, method.getParameterTypes()[0].cast(v));
                     }
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-            }
+            });
         }
+
     }
 
-    public static void processUi(Object obj, View view){
-        for (Field field : obj.getClass().getDeclaredFields()) {
-            if (field.getAnnotation(UI.class) != null) {
+    static void processLongClick(Resources resources, String pkName, Object object, Method method, View view) {
 
-                int resId = getAnnotatedFieldId(field, obj);
+        boolean methodReturnBoolean = (method.getReturnType().isAssignableFrom(boolean.class)
+                || method.getReturnType().isAssignableFrom(Boolean.class));
 
-                field.setAccessible(true);
+        if (method.getAnnotation(LongClick.class) != null && methodReturnBoolean) {
 
+            int resId = -1;
+
+            if (method.getAnnotation(LongClick.class).value() != -1) {
+                resId = method.getAnnotation(LongClick.class).value();
+            } else {
+                resId = resources.getIdentifier(method.getName(), "id", pkName);
+            }
+
+            method.setAccessible(true);
+            View targetView = view.findViewById(resId);
+
+            targetView.setOnLongClickListener(v -> {
                 try {
-                    field.set(obj, field.getType().cast(view.findViewById(resId)));
-                } catch (IllegalAccessException e) {
+                    if (method.getParameterTypes().length == 0) {
+                        return (boolean) method.invoke(object);
+                    } else if (method.getParameterTypes().length == 1) {
+                        return (boolean) method.invoke(object, method.getParameterTypes()[0].cast(v));
+                    }
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
+                return false;
+            });
+
+        }
+
+    }
+
+    static void processSectionPagerAdapter(Function<Integer, View> findById, Object object, Method method) {
+        if (method.getAnnotation(SectionPagerAdapter.class) != null) {
+
+            int id = method.getAnnotation(SectionPagerAdapter.class).id();
+            int count = method.getAnnotation(SectionPagerAdapter.class).count();
+
+            ViewPager viewPager = (ViewPager) findById.apply(id);
+            viewPager.setAdapter(new SectPagerAdapter(new Refl(object)
+                    .methodName("getSupportFragmentManager")
+                    .invoke(FragmentManager.class), object, method, count));
+        }
+
+    }
+
+    private static class SectPagerAdapter extends FragmentPagerAdapter {
+
+        Object object;
+        Method method;
+        int count;
+
+        public SectPagerAdapter(FragmentManager fragmentManager, Object object, Method method, int count) {
+            super(fragmentManager);
+            this.object = object;
+            this.method = method;
+            this.count = count;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            try {
+                return (Fragment) method.invoke(object, position);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                e.printStackTrace();
+                return null;
             }
+        }
+
+        @Override
+        public int getCount() {
+            return count;
         }
     }
 
-    static int getAnnotatedFieldId(Field field, Object objectContainer){
-        int resId = field.getAnnotation(UI.class).value();
-        if(resId==-1) {
-            if(objectContainer instanceof Activity) {
-                resId = ((Activity) objectContainer).getResources()
-                        .getIdentifier(field.getName(), ID, ((Activity) objectContainer)
-                                .getPackageName());
-            } else if(objectContainer instanceof Fragment) {
-                resId = ((Fragment) objectContainer).getResources()
-                        .getIdentifier(field.getName(), ID, ((Fragment) objectContainer)
-                                .getActivity()
-                                .getPackageName());
-            }
-        }
-        return resId;
-    }
 }

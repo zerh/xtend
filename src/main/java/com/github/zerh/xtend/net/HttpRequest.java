@@ -1,11 +1,6 @@
 package com.github.zerh.xtend.net;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,62 +15,43 @@ import okhttp3.RequestBody;
  * Created by eliezer on 11/19/17.
  */
 
-public class Call {
+public class HttpRequest {
 
-    private final Object object;
+    private HttpRequest me;
+    private final Activity act;
     private final String url;
-
     private Response response;
     private Map<String, String> params;
     private Map<String, MultiPartFile> multiPartFileMap;
     private List<String> headers;
     private boolean done;
     private RequestMethod requestMethod;
-    private Gson gson;
 
     boolean multipart;
 
-    Call(Object object, String url, RequestMethod requestMethod,
-         Map<String, String> params, Map<String, MultiPartFile> multiPartFileMap, List<String> headers){
-
-        this.object = object;
+    <T extends Activity> HttpRequest(T act,
+                                     String url,
+                                     RequestMethod requestMethod,
+                                     Map<String, String> params,
+                                     Map<String, MultiPartFile> multiPartFileMap,
+                                     List<String> headers){
+        this.act = act;
         this.url = url;
         this.params = params;
         this.multiPartFileMap = multiPartFileMap;
         this.headers = headers;
         this.requestMethod = requestMethod;
-
-        gson = new Gson();
+        me = this;
     }
 
-    public <T> void execute(Callback<T> callback, Class<T> clazz){
-        execute(r -> {
-            T obj = null;
-            try {
-                Object fromJson = gson.fromJson(response.body(), clazz);
-                if(fromJson!=null) {
-                    obj = clazz.cast(fromJson);
-                    callback.apply(obj);
-                }
-            } catch (JsonSyntaxException ex) {
-                //ex.printStackTrace();
-                Log.e("JsonSyntaxException", ex.getMessage());
-
-            }
-
-        });
-    }
-
-    public void execute(ResponseCallback callback){
+    public void callback(Callback<Response> callback){
         response = new Response();
-
         Runnable runnable = new Runnable() {
             okhttp3.Response okResp;
             @Override
             public void run() {
 
                 if(requestMethod.equals(RequestMethod.GET)) {
-
                     okResp = HttpUtil.httpGet(url);
                 } else if(requestMethod.equals(RequestMethod.HEAD)) {
                     okResp = HttpUtil.httpHead(url);
@@ -89,35 +65,28 @@ public class Call {
                                     multipart?getMultipartBody():getFormBody(), type);
                 }
 
-                Call.this.response.setHeaders(okResp.headers().toMultimap());
+                HttpRequest.this.response.setHeaders(okResp.headers().toMultimap());
 
                 if(okResp.body()!=null) {
                     try {
-                        Call.this.response.rawBody(okResp.body().bytes());
+                        HttpRequest.this.response.rawBody(okResp.body().bytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
 
-                Call.this.response.setStatus(okResp.code());
+                HttpRequest.this.response.setStatus(okResp.code());
 
                 done = true;
 
-                Runnable runnable = new Runnable() {
+                act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if(callback!=null){
-                            callback.apply(Call.this.response);
+                            callback.accept(HttpRequest.this.response);
                         }
                     }
-                };
-
-                if(object instanceof Fragment) {
-                    ((Fragment) object).getActivity().runOnUiThread(runnable);
-                } else if ( object instanceof Activity ) {
-                    ((Activity) object).runOnUiThread(runnable);
-                }
-
+                });
 
             }
         };

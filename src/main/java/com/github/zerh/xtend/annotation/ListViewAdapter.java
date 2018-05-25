@@ -1,16 +1,14 @@
-package com.github.zerh.xtend.net.annotation;
+package com.github.zerh.xtend.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Created by eliezer on 11/19/17.
- */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Option {
-    String value();
+public @interface ListViewAdapter {
+    int id();
+    String dataSource();
+    //ViewHolder[] viewHolder() default;
 }

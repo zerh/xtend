@@ -5,5 +5,5 @@ package com.github.zerh.xtend.net;
  */
 
 public interface Callback<T> {
-    void apply(T data);
+    void accept(T data);
 }

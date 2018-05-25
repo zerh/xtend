@@ -1,5 +1,7 @@
 package com.github.zerh.xtend.annotation;
 
+import android.support.v4.app.Fragment;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,8 +12,8 @@ import java.lang.annotation.Target;
  */
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface ContentView {
-    int value();
-    boolean attachToRoot() default false;
+@Target(ElementType.METHOD)
+public @interface SectionPagerAdapter {
+    int id();
+    int count();
 }
