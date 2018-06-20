@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.github.zerh.xtend.annotation.*;
-import com.github.zerh.xtend.net.RestBuilder;
-import com.github.zerh.xtend.net.annotation.RestService;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -39,7 +37,6 @@ public class Xtend {
 
         for (Field field : object.getClass().getDeclaredFields()) {
             processUi(object.getResources(), pkName, object, field, view);
-            processRestService(object, field);
         }
 
         for (Method method : object.getClass().getDeclaredMethods()) {
@@ -62,7 +59,6 @@ public class Xtend {
 
         for (Field field : object.getClass().getDeclaredFields()) {
             processUi(object.getResources(), pkName, object, field, view);
-            processRestService(object.getActivity(), field);
         }
 
         for (Method method : object.getClass().getDeclaredMethods()) {
@@ -91,7 +87,6 @@ public class Xtend {
 
         for (Field field : object.getClass().getDeclaredFields()) {
             processUi(object.getResources(), object.getActivity().getPackageName(), object, field, view);
-            processRestService(object.getActivity(), field);
         }
 
         for (Method method : object.getClass().getDeclaredMethods()) {
@@ -103,17 +98,6 @@ public class Xtend {
 
 
         return view;
-    }
-
-    static <T extends Activity> void processRestService(T object, Field field) {
-        if (field.getAnnotation(RestService.class) != null) {
-            field.setAccessible(true);
-            try {
-                field.set(object, field.getType().cast(RestBuilder.build(object, field.getType())));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     static void processPostInflated(Object object, Method method) {
