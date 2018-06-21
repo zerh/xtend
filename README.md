@@ -63,7 +63,7 @@ public class MyApp extends AppCompatActivity {
 
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/App.gif" alt="App" width="350" />
 
-# Download 
+# Download
 Add the jitpack repo
 ```gradle
 allprojects {
@@ -78,4 +78,17 @@ Add the dependecy
 dependencies {
     implementation 'com.github.zerh:xtend:master'
 }
+```
+Set the java 8 compilation in the build.gradle(Module: app) file
+
+```gradle
+
+android {
+    ...
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
 ```
