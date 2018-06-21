@@ -60,7 +60,8 @@ public class MyApp extends AppCompatActivity {
 ```
 
 # Result
-![](https://raw.githubusercontent.com/zerh/xtend/master/App.gif =350x )
+
+<img src="https://raw.githubusercontent.com/zerh/xtend/master/App.gif" alt="App" width="350" />
 
 # Download 
 Add the jitpack repo
