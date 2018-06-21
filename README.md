@@ -59,6 +59,9 @@ public class MyApp extends AppCompatActivity {
 }
 ```
 
+# Result
+![](App.gif =150x)
+
 # Download 
 Add the jitpack repo
 ```gradle
