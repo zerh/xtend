@@ -8,7 +8,7 @@ import java.util.function.Function;
 class Refl {
 
     private static final String errorTag = "Xtend Error";
-    private static final String message = "CommonMethods parameter needed with method reference of ";
+    private static final String message = "Parameter needed with method ";
 
     private Object object;
     private String methodName;
