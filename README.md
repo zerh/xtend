@@ -1,14 +1,10 @@
 # Xtend
 
-- Apply the content view to Activities, Fragments or XtendFragments using @ContentView
-
+- Apply the content view to Activities, Fragments or XtendFragments using @ContentView.
 - Ui binding with the ```@UI``` fields annotation.
-
-- Event binding with ```@Click``` and ```@LongClick``` annotations for methods
-
-- Apply a PagerAdapter using the ```@SectionPagerAdapter``` annotation
-
-- Fragment subclass ```XtendFragment``` to works with annotations
+- Event binding with ```@Click``` and ```@LongClick``` annotations for methods.
+- Apply a PagerAdapter using the ```@SectionPagerAdapter``` annotation.
+- Fragment subclass ```XtendFragment``` to works with annotations.
 
 
 ## Download
