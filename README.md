@@ -64,31 +64,5 @@ public class MyApp extends AppCompatActivity {
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/App.gif" alt="App" width="350" />
 
 # Download
-Add the jitpack repo
-```gradle
-allprojects {
-	repositories {
-		maven { url 'https://jitpack.io' }
-	}
-}
-```
+Download the jar file [xtend-0.1.0.jar](https://github.com/zerh/xtend/raw/master/target/xtend-0.1.0.jar) and copy it to the lib folder 
 
-Add the dependecy
-```gradle
-dependencies {
-    implementation 'com.github.zerh:xtend:master-SNAPSHOT'
-}
-```
-Set the java 8 compilation in the build.gradle(Module: app) file
-
-```gradle
-
-android {
-    ...
-    compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
-    }
-}
-
-```
