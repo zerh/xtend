@@ -76,7 +76,7 @@ allprojects {
 Add the dependecy
 ```gradle
 dependencies {
-    implementation 'com.github.zerh:xtend:master'
+    implementation 'com.github.zerh:xtend:master-SNAPSHOT'
 }
 ```
 Set the java 8 compilation in the build.gradle(Module: app) file
