@@ -2,7 +2,7 @@
 
 - Apply the content view to Activities, Fragments or XtendFragments using @ContentView
 
-- Ui binding with the ```@UI``` fields and methods annotation.
+- Ui binding with the ```@UI``` fields annotation.
 
 - Event binding with ```@Click``` and ```@LongClick``` annotations for methods
 
