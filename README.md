@@ -14,6 +14,8 @@
 ## Download
 Download the jar file [xtend-0.1.0.jar](https://github.com/zerh/xtend/raw/master/target/xtend-0.1.0.jar) and copy it to the lib folder.
 
+<img src="https://raw.githubusercontent.com/zerh/xtend/master/img/lib-folder.png" alt="lib-folder" />
+
 ## Getting Started
 ```java
 @ContentView(R.layout.activity_fragment_test)
@@ -65,7 +67,7 @@ public class MyApp extends AppCompatActivity {
 
 # Result
 
-<img src="https://raw.githubusercontent.com/zerh/xtend/master/App.gif" alt="App" width="350" />
+<img src="https://raw.githubusercontent.com/zerh/xtend/master/img/App.gif" alt="App" width="350" />
 
 
 
