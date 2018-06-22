@@ -37,7 +37,7 @@ public class MyApp extends AppCompatActivity {
 }
 ```
 
-In the case that the components do not have their id written in camel case, the id can be passed to the annotation by parameter:
+In the case that the components don't have their id written in camel case, the id can be passed to the annotation by parameter:
 
 ```java
 @ContentView(R.layout.activity_fragment_test)
