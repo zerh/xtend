@@ -13,11 +13,38 @@ Download the jar file [xtend-0.1.0.jar](https://github.com/zerh/xtend/raw/master
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/img/lib-folder.png" alt="lib-folder" width="280" />
 
 ## Getting Started
+Using ```@UI``` bind the field with the xml component, if both have the same name. In the case of ```@Click``` and ```@LongClick```, the methods must have the same names of the components to which the events will apply, as bellow.
+
 ```java
 @ContentView(R.layout.activity_fragment_test)
 public class MyApp extends AppCompatActivity {
 
-    @UI Toolbar toolbar;
+    @UI Toolbar myToolbar;
+    @UI TextView myTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Xtend.map(this);
+
+        setSupportActionBar(myToolbar);
+    }
+
+    @Click
+    void fab(View view) {
+        myTextView.setText("Hello World");
+    }
+}
+```
+
+In the case that the components do not have their id written in camel case, the id can be passed to the annotation by parameter:
+
+```java
+@ContentView(R.layout.activity_fragment_test)
+public class MyApp extends AppCompatActivity {
+
+    @UI(R.id.my_toolbar)
+    Toolbar myToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +54,20 @@ public class MyApp extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    @Click
+    @Click(R.id.my_textview)
     void fab(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        myTextView.setText("Hello World");
     }
+}
+```
+
+In the ViewPager case, the @SectionPagerAdapter annotation abstracts a FragmentStatePagerAdapter adapter using a simple method.
+
+```java
+@ContentView(R.layout.activity_fragment_test)
+public class MyApp extends AppCompatActivity {
+
+    ...
 
     @SectionPagerAdapter(id = R.id.container, count = 3)
     Fragment getItem(int position) {
