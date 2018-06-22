@@ -61,7 +61,7 @@ public class MyApp extends AppCompatActivity {
 }
 ```
 
-# Result
+### Result
 
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/img/App.gif" alt="App" width="350" />
 
