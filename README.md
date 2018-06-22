@@ -17,7 +17,8 @@ Download the jar file [xtend-0.1.0.jar](https://github.com/zerh/xtend/raw/master
 @ContentView(R.layout.activity_fragment_test)
 public class MyApp extends AppCompatActivity {
 
-    @UI Toolbar toolbar;
+    @UI(R.id.main_toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class MyApp extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    @Click
+    @Click(R.id.fab_button)
     void fab(View view) {
         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
