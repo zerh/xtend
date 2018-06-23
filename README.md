@@ -89,7 +89,7 @@ Fragment getItem(int position) {
 
 ```java
 @ContentView(R.layout.fragment_fragment_test)
-public static class SectionScreen {
+public class SectionScreen {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
