@@ -85,7 +85,9 @@ Fragment getItem(int position) {
 
     return FragmentBuilder.build(SectionScreen.class, args);
 }
+```
 
+```java
 @ContentView(R.layout.fragment_fragment_test)
 public static class SectionScreen {
 
