@@ -12,6 +12,17 @@ Download the jar file [xtend-0.1.0.jar](https://github.com/zerh/xtend/raw/master
 
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/img/lib-folder.png" alt="lib-folder" width="280" />
 
+Add support for java 8+
+```gradle
+android {
+    ...
+    CompileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+```
+
 ## Getting Started
 Using ```@UI``` bind the field with the xml component, if both have the same name. In the case of ```@Click``` and ```@LongClick```, the methods must have the same names of the components to which the events will apply, as bellow.
 
