@@ -72,7 +72,7 @@ public class MyApp extends AppCompatActivity {
 }
 ```
 
-In the ViewPager case, the @SectionPagerAdapter annotation abstracts a FragmentStatePagerAdapter adapter using a simple method.
+In the ViewPager case, the @SectionPagerAdapter annotation abstracts a FragmentStatePagerAdapter adapter using a simple method. You can also use FragmentBuilder, to generate a fragment from a class, in this way you can create fragments without sacrificing their inheritance.
 
 ```java
 @ContentView(R.layout.activity_fragment_test)
@@ -82,16 +82,16 @@ public class MyApp extends AppCompatActivity {
 
     @SectionPagerAdapter(id = R.id.container, count = 3)
     Fragment getItem(int position) {
-        Bundle args = new Bundle();
-        args.putInt(PlaceholderFragment.ARG_SECTION_NUMBER, position);
 
-        PlaceholderFragment fr = new PlaceholderFragment();
-        fr.setArguments(args);
-        return fr;
+        Bundle args = new Bundle();
+        args.putInt(SectionScreen.ARG_SECTION_NUMBER, position);
+
+        SectionScreen fr = new SectionScreen();
+        return FragmentBuilder.build(SectionScreen.class, args);
     }
 
     @ContentView(R.layout.fragment_fragment_test)
-    public static class PlaceholderFragment extends XtendFragment {
+    public static class SectionScreen {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -99,8 +99,8 @@ public class MyApp extends AppCompatActivity {
         public TextView myTextView;
 
         @PostInflated
-        public void init() {
-            String text = getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER));
+        public void init(Bundle bundle, Resources resources) {
+            String text = resources.getString(R.string.section_format, bundle.getInt(ARG_SECTION_NUMBER));
             myTextView.setText(text);
         }
     }
