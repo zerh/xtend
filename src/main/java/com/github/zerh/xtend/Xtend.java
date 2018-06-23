@@ -18,6 +18,7 @@ import com.github.zerh.xtend.annotation.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Xtend {
@@ -115,15 +116,14 @@ public class Xtend {
                     }
 
                 } if (method.getParameterTypes().length == 2 ) {
-                    Class[] types = method.getParameterTypes();
 
-                    if(types[0].isAssignableFrom(Resources.class) &&
-                        types[1].isAssignableFrom(Bundle.class)) {
+                    if(method.getParameterTypes()[0].isAssignableFrom(Resources.class) 
+                        && method.getParameterTypes()[1].isAssignableFrom(Bundle.class)) {
 
                         method.invoke(object, resources, bundle);
 
-                    } else if (types[0].isAssignableFrom(Bundle.class)
-                        && types[1].isAssignableFrom(Resources.class)) {
+                    } else if (method.getParameterTypes()[0].isAssignableFrom(Bundle.class)
+                        && method.getParameterTypes()[1].isAssignableFrom(Resources.class)) {
 
                         method.invoke(object, bundle, resources);
                     }
@@ -264,5 +264,5 @@ public class Xtend {
             return count;
         }
     }
-    
+
 }
