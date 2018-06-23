@@ -27,7 +27,7 @@ android {
 Using ```@UI``` bind the field with the xml component, if both have the same name. In the case of ```@Click``` and ```@LongClick```, the methods must have the same names of the components to which the events will apply, as bellow.
 
 ```java
-@ContentView(R.layout.activity_fragment_test)
+@ContentView(R.layout.activity_main)
 public class MyApp extends AppCompatActivity {
 
     @UI Toolbar myToolbar;
@@ -51,7 +51,7 @@ public class MyApp extends AppCompatActivity {
 In the case that the components don't have their id written in camel case, the id can be passed to the annotation by parameter:
 
 ```java
-@ContentView(R.layout.activity_fragment_test)
+@ContentView(R.layout.activity_main)
 public class MyApp extends AppCompatActivity {
 
     @UI(R.id.my_toolbar)
@@ -77,14 +77,25 @@ public class MyApp extends AppCompatActivity {
 In the ViewPager case, the ```@SectionPagerAdapter``` annotation abstracts a ```FragmentStatePagerAdapter``` using a simple method. You can also use ```FragmentBuilder```, to generate a fragment from a class, in this way you can create fragments without sacrificing their inheritance.
 
 ```java
-@SectionPagerAdapter(id = R.id.container, count = 3)
-Fragment getItem(int position) {
+@ContentView(R.layout.activity_main)
+public class MyApp extends AppCompatActivity {
 
-    Bundle args = new Bundle();
-    args.putInt(SectionScreen.ARG_SECTION_NUMBER, position);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Xtend.map(this);
+    }
 
-    return FragmentBuilder.build(SectionScreen.class, args);
+    @SectionPagerAdapter(id = R.id.container, count = 3)
+    Fragment getItem(int position) {
+
+        Bundle args = new Bundle();
+        args.putInt(SectionScreen.ARG_SECTION_NUMBER, position);
+
+        return FragmentBuilder.build(SectionScreen.class, args);
+    }
 }
+    
 ```
 
 ```java
