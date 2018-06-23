@@ -4,7 +4,7 @@
 - Ui binding with the ```@UI``` fields annotation.
 - Event binding with ```@Click``` and ```@LongClick``` annotations for methods.
 - Apply a PagerAdapter using the ```@SectionPagerAdapter``` annotation.
-- Fragment subclass ```XtendFragment``` to works with annotations.
+- ```Fragments``` without inheriting from ```Fragment``` with ```FragmentBuilder``` and working only with annotations.
 
 
 ## Download
