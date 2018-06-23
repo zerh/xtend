@@ -86,7 +86,6 @@ public class MyApp extends AppCompatActivity {
         Bundle args = new Bundle();
         args.putInt(SectionScreen.ARG_SECTION_NUMBER, position);
 
-        SectionScreen fr = new SectionScreen();
         return FragmentBuilder.build(SectionScreen.class, args);
     }
 
