@@ -72,7 +72,7 @@ public class MyApp extends AppCompatActivity {
 }
 ```
 
-In the ViewPager case, the @SectionPagerAdapter annotation abstracts a FragmentStatePagerAdapter adapter using a simple method. You can also use FragmentBuilder, to generate a fragment from a class, in this way you can create fragments without sacrificing their inheritance.
+In the ViewPager case, the ```@SectionPagerAdapter``` annotation abstracts a ```FragmentStatePagerAdapter``` using a simple method. You can also use ```FragmentBuilder```, to generate a fragment from a class, in this way you can create fragments without sacrificing their inheritance.
 
 ```java
 @ContentView(R.layout.activity_fragment_test)
