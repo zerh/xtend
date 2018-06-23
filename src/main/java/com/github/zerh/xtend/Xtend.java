@@ -3,6 +3,7 @@ package com.github.zerh.xtend;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -25,7 +26,7 @@ public class Xtend {
 
     public static ListView l;
 
-    public static <T extends Activity> void map(T object) {
+    public static <T extends Activity> Xtend map(T object) {
 
         if (object.getClass().getAnnotation(ContentView.class) != null) {
             int viewId = object.getClass().getAnnotation(ContentView.class).value();
@@ -43,8 +44,10 @@ public class Xtend {
             processClick(object.getResources(), pkName, object, method, view);
             processLongClick(object.getResources(), pkName, object, method, view);
             processSectionPagerAdapter(object::findViewById, object, method);
-            processPostInflated(object, method);
+            processPostInflated(object, method, object.getResources(),object.getIntent().getExtras());
         }
+
+        return new Xtend();
     }
 
     public static <T extends Fragment> void map(T object, View view) {
@@ -65,18 +68,17 @@ public class Xtend {
             processClick(object.getResources(), pkName, object, method, view);
             processLongClick(object.getResources(), pkName, object, method, view);
             processSectionPagerAdapter(object.getView()::findViewById, object, method);
-            processPostInflated(object, method);
+            processPostInflated(object, method, object.getResources(), object.getArguments());
         }
 
     }
 
-
-    static <T extends Fragment> View map(T object, LayoutInflater inflater, ViewGroup container) {
+    static <T extends Fragment> View map(T object, Object object2, LayoutInflater inflater, ViewGroup container) {
 
         View view = null;
-        if (object.getClass().getAnnotation(ContentView.class) != null) {
+        if (object2.getClass().getAnnotation(ContentView.class) != null) {
 
-            ContentView contentView = object.getClass().getAnnotation(ContentView.class);
+            ContentView contentView = object2.getClass().getAnnotation(ContentView.class);
             int id = contentView.value();
             boolean attachToRoot = contentView.attachToRoot();
 
@@ -85,27 +87,48 @@ public class Xtend {
 
         String pkName = object.getActivity().getPackageName();
 
-        for (Field field : object.getClass().getDeclaredFields()) {
-            processUi(object.getResources(), object.getActivity().getPackageName(), object, field, view);
+        for (Field field : object2.getClass().getDeclaredFields()) {
+            processUi(object.getResources(), object.getActivity().getPackageName(), object2, field, view);
         }
 
-        for (Method method : object.getClass().getDeclaredMethods()) {
-            processClick(object.getResources(), pkName, object, method, view);
-            processLongClick(object.getResources(), pkName, object, method, view);
-            //processSectionPagerAdapter(object.getView()::findViewById, object, method);
-            processPostInflated(object, method);
+        for (Method method : object2.getClass().getDeclaredMethods()) {
+            processClick(object.getResources(), pkName, object2, method, view);
+            processLongClick(object.getResources(), pkName, object2, method, view);
+            processPostInflated(object2, method, object.getResources(), object.getArguments());
         }
-
 
         return view;
     }
 
-    static void processPostInflated(Object object, Method method) {
+    static void processPostInflated(Object object, Method method, Resources resources, Bundle bundle) {
         if (method.getAnnotation(PostInflated.class) != null) {
             try {
                 if (method.getParameterTypes().length == 0) {
                     method.invoke(object);
+
+                } else if (method.getParameterTypes().length == 1 ) {
+
+                    if (method.getParameterTypes()[0].isAssignableFrom(Resources.class)) {
+                        method.invoke(object, resources);
+                    } else if (method.getParameterTypes()[0].isAssignableFrom(Bundle.class)) {
+                        method.invoke(object, bundle);
+                    }
+
+                } if (method.getParameterTypes().length == 2 ) {
+                    Class[] types = method.getParameterTypes();
+
+                    if(types[0].isAssignableFrom(Resources.class) &&
+                        types[1].isAssignableFrom(Bundle.class)) {
+
+                        method.invoke(object, resources, bundle);
+
+                    } else if (types[0].isAssignableFrom(Bundle.class)
+                        && types[1].isAssignableFrom(Resources.class)) {
+
+                        method.invoke(object, bundle, resources);
+                    }
                 }
+
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -241,5 +264,5 @@ public class Xtend {
             return count;
         }
     }
-
+    
 }
