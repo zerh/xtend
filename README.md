@@ -24,7 +24,7 @@ android {
 ```
 
 ## Getting Started
-Using ```@UI``` bind the field with the xml component, if both have the same name. Also ```@ContentView``` is responsible for loading the layout in the annotated ```Fragment``` or ```Activity```. In the case of ```@Click``` and ```@LongClick```, the methods must have the same names of the components to which the events will apply, as bellow.
+Using ```@UI``` bind the field with the xml component, if both have the same name. Also, ```@ContentView``` is responsible for loading the layout in the annotated ```Fragment``` or ```Activity```. In the case of ```@Click``` and ```@LongClick```, the methods must have the same names of the components to which the events will apply, as bellow.
 
 ```java
 @ContentView(R.layout.activity_main)
