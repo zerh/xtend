@@ -34,8 +34,8 @@ public class MyApp extends AppCompatActivity {
     @UI TextView myTextView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         Xtend.map(this);
 
         setSupportActionBar(myToolbar);
@@ -58,8 +58,8 @@ public class MyApp extends AppCompatActivity {
     Toolbar myToolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         Xtend.map(this);
 
         setSupportActionBar(toolbar);
@@ -81,8 +81,8 @@ In the ViewPager case, the ```@SectionPagerAdapter``` annotation abstracts a ```
 public class MyApp extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         Xtend.map(this);
     }
 
