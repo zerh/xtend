@@ -12,7 +12,7 @@ Download the jar file [xtend-0.1.1.jar](https://github.com/zerh/xtend/raw/master
 
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/img/lib-folder.png" alt="lib-folder" width="280" />
 
-Add support for java 8+
+And add support for java 8+
 ```gradle
 android {
     ...
