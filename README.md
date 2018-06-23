@@ -94,8 +94,7 @@ public class MyApp extends AppCompatActivity {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        @UI
-        public TextView myTextView;
+        @UI TextView myTextView;
 
         @PostInflated
         public void init(Bundle bundle, Resources resources) {
