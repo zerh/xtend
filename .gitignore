@@ -2,6 +2,7 @@
 /target/generated-sources
 /target/maven-archiver
 /target/maven-status
+README.md
 .DS_Store
 .project
 .classpath
