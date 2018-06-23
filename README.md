@@ -8,7 +8,7 @@
 
 
 ## Download
-Download the jar file [xtend-0.1.0.jar](https://github.com/zerh/xtend/raw/master/target/xtend-0.1.0.jar) and copy it to the lib folder.
+Download the jar file [xtend-0.1.1.jar](https://github.com/zerh/xtend/raw/master/target/xtend-0.1.1.jar) and copy it to the lib folder.
 
 <img src="https://raw.githubusercontent.com/zerh/xtend/master/img/lib-folder.png" alt="lib-folder" width="280" />
 
