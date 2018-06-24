@@ -18,7 +18,8 @@ allprojects {
         ...
         maven { url 'https://jitpack.io' }
     }
-}```
+}
+```
 
 And add the dependency
 ```gradle
@@ -26,8 +27,8 @@ dependencies {
     ...
     implementation 'com.github.zerh:xtend:master-SNAPSHOT'
 }
-
 ```
+
 ### Using the jar file
 Download the jar file [xtend-0.1.1.jar](https://github.com/zerh/xtend/raw/master/target/xtend-0.1.1.jar) and copy it to the lib folder.
 
