@@ -11,11 +11,12 @@
 
 #### Using gradle
 
-Add the repository
+Add the jitpack repository
 ```gradle
 allprojects {
     repositories {
-        ...
+        google()
+        jcenter()
         maven { url 'https://jitpack.io' }
     }
 }
