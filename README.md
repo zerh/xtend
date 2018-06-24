@@ -21,8 +21,17 @@ allprojects {
 }
 ```
 
-And add the dependency
+And add the dependency and add support for java 8+
 ```gradle
+
+android {
+    ...
+    CompileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
 dependencies {
     ...
     implementation 'com.github.zerh:xtend:master-SNAPSHOT'
