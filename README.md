@@ -22,7 +22,7 @@ allprojects {
 }
 ```
 
-And add the dependency and add support for java 8+
+And add the dependency and the support for java 8+
 ```gradle
 
 android {
