@@ -21,7 +21,7 @@ allprojects {
 }```
 
 And add the dependency
-```
+```gradle
 dependencies {
     ...
     implementation 'com.github.zerh:xtend:master-SNAPSHOT'
