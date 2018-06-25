@@ -108,9 +108,10 @@ public class MyApp extends AppCompatActivity {
 
 In the ViewPager case, the ```@SectionPagerAdapter``` annotation abstracts a ```FragmentStatePagerAdapter``` using a simple method. You can also use ```FragmentBuilder```, to generate a fragment from a class, in this way you can create fragments without sacrificing their inheritance.
 
+##### MyActivity.java
 ```java
 @ContentView(R.layout.activity_main)
-public class MyApp extends AppCompatActivity {
+public class MyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -124,9 +125,9 @@ public class MyApp extends AppCompatActivity {
         return FragmentBuilder.build(sectionScreen);
     }
 }
-    
 ```
 
+##### SectionScreen.java
 ```java
 @ContentView(R.layout.my_fragment)
 public class SectionScreen {
@@ -140,12 +141,20 @@ public class SectionScreen {
     }
 
     @PostInflated
-    public void init(Bundle bundle, Resources resources) {
-        String text = resources.getString(R.string.section_format, sectionNumber);
+    public void init(Resources resources) {
+        String text = resources.getString(R.string.hello_from_section) + sectionNumber;
         myTextView.setText(text);
     }
 }
 
+```
+
+##### strings.xml
+```xml
+<resources>
+    ...
+    <string name="hello_from_section">"Hello World from section: "</string>
+</resources
 ```
 
 #### Result
