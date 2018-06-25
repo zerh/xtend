@@ -134,7 +134,7 @@ public class MyApp extends AppCompatActivity {
 @ContentView(R.layout.fragment_fragment_test)
 public class SectionScreen {
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    public static final String ARG_SECTION_NUMBER = "section_number";
 
     @UI TextView myTextView;
 
