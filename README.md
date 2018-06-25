@@ -120,11 +120,8 @@ public class MyApp extends AppCompatActivity {
 
     @SectionPagerAdapter(id = R.id.container, count = 3)
     Fragment getItem(int position) {
-
-        Bundle args = new Bundle();
-        args.putInt(SectionScreen.ARG_SECTION_NUMBER, position);
-
-        return FragmentBuilder.build(SectionScreen.class, args);
+        SectionScreen sectionScreen = new SectionScreen(position);
+        return FragmentBuilder.build(sectionScreen);
     }
 }
     
@@ -134,13 +131,17 @@ public class MyApp extends AppCompatActivity {
 @ContentView(R.layout.my_fragment)
 public class SectionScreen {
 
-    public static final String ARG_SECTION_NUMBER = "section_number";
+    int sectionNumber;
 
     @UI TextView myTextView;
+    
+    public SectionScreen(int sectionNumber){
+        this.sectionNumber = sectionNumber;
+    }
 
     @PostInflated
     public void init(Bundle bundle, Resources resources) {
-        String text = resources.getString(R.string.section_format, bundle.getInt(ARG_SECTION_NUMBER));
+        String text = resources.getString(R.string.section_format, sectionNumber);
         myTextView.setText(text);
     }
 }
