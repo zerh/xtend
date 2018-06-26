@@ -60,7 +60,7 @@ Using ```@UI``` bind the field with the xml component, if both have the same nam
 
 ```java
 @ContentView(R.layout.activity_main)
-public class MyApp extends AppCompatActivity {
+public class MyActivity extends AppCompatActivity {
 
     @UI Toolbar myToolbar;
     @UI TextView myTextView;
@@ -84,7 +84,7 @@ In the case that the components don't have their id written in camel case, the i
 
 ```java
 @ContentView(R.layout.activity_main)
-public class MyApp extends AppCompatActivity {
+public class MyActivity extends AppCompatActivity {
 
     @UI(R.id.my_toolbar)
     Toolbar myToolbar;
