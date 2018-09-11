@@ -27,7 +27,7 @@ And add the dependency and the support for java 8+
 
 android {
     ...
-    CompileOptions {
+    compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
@@ -48,7 +48,7 @@ And add support for java 8+
 ```gradle
 android {
     ...
-    CompileOptions {
+    compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
